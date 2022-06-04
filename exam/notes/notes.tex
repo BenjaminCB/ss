@@ -1,6 +1,6 @@
-\documentclass[12pt]{article}
+\documentclass[10pt]{article}
 \usepackage{blindtext}
-\usepackage[margin=0.25in]{geometry}
+\usepackage[a4paper, margin=0.25in]{geometry}
 
 \usepackage{tikz}
 \usepackage{mathpartir}
@@ -19,27 +19,27 @@
 
 \textbf{RegEx to FA:} a becomes $\rightarrow q_0 \rightarrow_a q_1$. $A \cup B$ add a new start state and make empty transition from that to the old start states. $A \circ B$ make the accept states of A regular states and make empty transitions from those to the start state of B. $A^*$ add a new start state which is also a final state, then for each final state make an empty transition from the old start state.
 
-\textbf{FA to RegEx:} Transform to GNFA. 1. The start state has transition arrows going to every other state but no arrows coming in from any other state. 2. There is only a single accept state, and it has arrows coming in from every other state but no arrows going to any other state. Furthermore, the accept state is no the same as the start state. 3. Except for the start and accept states, one arrow goes from every state to every other state and also from each state to itself.
+\textbf{FA to RegEx:} Transform to GNFA. 1. The start state has transition arrows going to every other state but no arrows coming in from any other state. 2. There is only a single accept state, and it has arrows coming in from every other state but no arrows going to any other state. Furthermore, the accept state is not the same as the start state. 3. Except for the start and accept states, one arrow goes from every state to every other state and also from each state to itself.
 
 1. $q_i$ goes to $q_{rip}$ with an arrow labeled $R_1$
-
+\quad
 2. $q_{rip}$ goes to itself with an arrow labeled $R_2$
 
 3. $q_{rip}$ goes to $q_j$ with an arrow labeled $R_3$
-
+\quad
 4. $q_i$ goes to $q_j$ with an arrow labeled $R_4$
 
-Then in the new machine, the arrow from $q_i$ to $q_j$ gets the label $(R_1)(R_2)^*(R_3)\cup(R_4)$. We make this change for each arrow going from any state $q_i$ to any state $q_j$, including the case where $q_i = q_j$. The new machine recognizes the original language.
+Then in the new machine, the arrow from $q_i$ to $q_j$ gets the label $(R_1)(R_2)^*(R_3)\cup(R_4)$. We make this change for each arrow going from any state $q_i$ to any state $q_j$, including the case where $q_i = q_j$.
 
-\textbf{Pumping lemma for reg lang:} If A is a regular language, then there is a number p (the pumping length) where if s is any string in A of length at least p, then s may be divided into three pieces, $s = xyz$, satisfying the following conditions: 1. for each $i \geq 0, xy^iz \in A$. 2. $|y| > 0$. 3. $|xy| \leq p$.
+\textbf{Pumping lemma for reg lang:} If A is a regular language, then there is a number p (the pumping length) where if s is any string in A of length at least p, then s may be divided into three pieces, $s = xyz$, satisfying the following conditions: \quad 1. for each $i \geq 0, xy^iz \in A$. \quad 2. $|y| > 0$. \quad 3. $|xy| \leq p$.
 
 \textbf{CFG:} A context-free grammar is a 4-tuple $(V,\Sigma,R,S)$, where V is a finite set called the variables, $\Sigma$ is a finite set, disjoint from V, called the terminals, R is a finite set of rules, with each rule being a variable and a string of variables and terminals and $S \in V$ is the start variable.
 
-\textbf{Chomsky normal form:} A context-free grammar is in Chomsky normal form if every rule is of the form $A \rightarrow BC$ or $A \rightarrow a$. Where a is any terminal and A, B and C are any variables--except that B and C may not be the start variable. In addition, we permit that rule $S \rightarrow \epsilon$, where $S$ is the start variable.
+\textbf{Chomsky normal form:} A context-free grammar is in Chomsky normal form if every rule is of the form $A \rightarrow BC$ or $A \rightarrow a$. Where a is any terminal and A, B and C are any variables--except that B and C may not be the start variable. In addition, we permit the rule $S \rightarrow \epsilon$, where $S$ is the start variable.
 
 \textbf{CFG to CNF: } We add a new start variable $S_0$ and the rule $S_0 \rightarrow S$, where $S$ was the original start variable.
 
-We take care of all $\epsilon$-rules. We remove an $\epsilon$-rule $A \rightarrow \epsilon$, where $A$ is not the start variable. Then for each occurrence of an $A$ on the right-hand side of a rule, we add a new rule with that occurrence deleted. In other words, if $R \rightarrow uAv$ is a rule in which u and v are strings of variables and terminals, we add rule $R \rightarrow uv$. We do so for each occurrence of an $A$, so the rule $R \rightarrow uAvAw$ causes us to add $R \rightarrow uvAw$, $R \rightarrow uAvw$, and $R \rightarrow uvw$. If we have the rule $R \rightarrow A$, we add $R \rightarrow \epsilon$ unless we had previously removed the rule $R \rightarrow \epsilon$. We repeat these steps until we eliminate all $\epsilon$-rules not involving the start variable.
+We take care of all $\epsilon$-rules. We remove an $\epsilon$-rule $A \rightarrow \epsilon$, where $A$ is not the start variable. Then for each occurrence of an $A$ on the right-hand side of a rule, we add a new rule with that occurrence deleted. In other words, the rule $R \rightarrow uAvAw$ causes us to add $R \rightarrow uvAw$, $R \rightarrow uAvw$, and $R \rightarrow uvw$. If we have the rule $R \rightarrow A$, we add $R \rightarrow \epsilon$ unless we had previously removed the rule $R \rightarrow \epsilon$. We repeat these steps until we eliminate all $\epsilon$-rules not involving the start variable.
 
 We handle all unit rules. We remove a unit rule $A \rightarrow B$. Then, whenever a rule $B \rightarrow u$ appears, we add the rule $A \rightarrow u$ unless this was a unit rule previously removed. As before, u is a string of variables and terminals. We repeat these steps until we eliminate all unit rules.
 
@@ -47,34 +47,35 @@ We convert all remaining rules into the proper form. We replace each rule $A \ri
 
 \textbf{CFG to PDA:} Place the marker symbol \$ and the start variable on the stack. Repeat the following steps forever. If the top of stack is a variable symbol A, nondeterministically select one of the rules for A and substitute A by the chosen production. If the top of stack is a terminal symbol a, read the next symbol from the input and compare it to a. If they match, repeat. If they do not match, reject on this branch of the nondeterminism. If the top of stack is the symbol \$, enter the accept state.
 
-\textbf{PDA to CFG:} First, we simplify our task by modifying P slightly to give it the following three features. Tt has a single accept state $q_{accept}$. Tt empties its stack before accepting. Each transition either pushes a symbol onto the stack or pops one of the stack, but it does not do both at the same time.
+\textbf{PDA to CFG:} First, we simplify our task by modifying P slightly to give it the following three features. It has a single accept state $q_{accept}$. It empties its stack before accepting. Each transition either pushes a symbol onto the stack or pops one of the stack, but it does not do both at the same time.
 
 Say that $P = (Q,\Sigma,\Gamma,\delta,q_0,\{q_{accept}\})$ and construct G. The variables of G are $\{A_{pq}|p,q \in Q\}$. The start variable is $A_{q_0,q_{accept}}$. Now we describe G's rules in three parts.
 
-\begin{enumerate}
-        \item For each $p,q,r,s \in Q, u \ in \Gamma$ and $a,b \in \Sigma_\epsilon$. If $(r,u) \in \delta(p,a,\epsilon)$ and $(q,\epsilon) \in \delta(s,b,u)$. Put the rule $A_{pq} \rightarrow aA_{rs}b$ in G.
-        \item For each $p,q,r \in Q$, put the rule $A_{pq} \rightarrow A_{pr}A_{rq}$ in G.
-        \item Finally, for each $p \in Q$, put the rule $A_{pp} \rightarrow \epsilon$ in G.
-\end{enumerate}
+1. For each $p,q,r,s \in Q, u \in \Gamma$ and $a,b \in \Sigma_\epsilon$. If $(r,u) \in \delta(p,a,\epsilon)$ and $(q,\epsilon) \in \delta(s,b,u)$. Put the rule $A_{pq} \rightarrow aA_{rs}b$ in G.
 
-\textbf{pumping lemma for cfl:} If A is a context-free language, then there is a number p (the pumping length) where, if s is any string in A of length at least p, then s may be divided into five pieces $s = uvxyz$ satisfying the conditions. 1. for each $i \geq 0, uv^ixy^iz \in A$. 2. $|vy| > 0$. 3. $|vxy| \leq p$.
+2. For each $p,q,r \in Q$, put the rule $A_{pq} \rightarrow A_{pr}A_{rq}$ in G.
+
+3. Finally, for each $p \in Q$, put the rule $A_{pp} \rightarrow \epsilon$ in G.
+
+\textbf{pumping lemma for cfl:} If A is a context-free language, then there is a number p (the pumping length) where, if s is any string in A of length at least p, then s may be divided into five pieces $s = uvxyz$ satisfying the conditions. \quad 1. for each $i \geq 0, uv^ixy^iz \in A$. \quad 2. $|vy| > 0$. \quad 3. $|vxy| \leq p$.
 
 \textbf{SOS:} To summarize, a structural operational semantics consists of the following.
-\begin{itemize}
-        \item A definition of the abstract syntax of the languages with
-        \begin{itemize}
-                \item a listing of the syntactic categories used in the language
-                \item for each syntatic cotegory, a set of formation rules
-        \end{itemize}
-        \item Definitions of additional sets and auxiliary functions, if needed
-        \item Definitions of all transition systems. For each transition system $(\Gamma, \rightarrow,T)$ there must be
-        \begin{itemize}
-                \item a definition of the set of configurations $\Gamma$ and the set of terminal configurations $T$
-                \item a set of syntax-directed transition rules defining the transition relation $\rightarrow$
-        \end{itemize}
-\end{itemize}
 
-\textbf{Transition induction:} We use this technique, if we want to prove a claim of the form 'For all transitions P holds', where P is some property. We then proceed as follows. For each axiom show that P holds. For each transition rule show that P is preserved by the rule, that is, show that if we assume that P holds for all Premises in the rule, then P will also hold for its conclusion. This is induction on k, where k is the height of our derivation tree.
+\quad \quad - A definition of the abstract syntax of the languages with
+
+\quad \quad \quad - a listing of the syntactic categories used in the language
+
+\quad \quad \quad - for each syntactic category, a set of formation rules
+
+\quad \quad - Definitions of additional sets and auxiliary functions, if needed
+
+\quad \quad - Definitions of all transition systems. For each transition system $(\Gamma, \rightarrow,T)$ there must be
+
+\quad \quad \quad - a definition of the set of configurations $\Gamma$ and the set of terminal configurations $T$
+
+\quad \quad \quad - a set of syntax-directed transition rules defining the transition relation $\rightarrow$
+
+\textbf{Transition induction:} Use this technique, if we want to prove a claim of the form 'For all transitions P holds', where P is some property. Then proceed as follows. For each axiom show that P holds. For each transition rule show that P is preserved by the rule, that is, show that if we assume that P holds for all Premises in the rule, then P will also hold for its conclusion. This is induction on k, where k is the height of our derivation tree.
 
 \textbf{Induction on the length of transition sequences:} We use this technique for a small-step semantics, if we want to prove a claim of the form 'For all transition sequences P holds'. This, too, is an induction in the normal sense, in that we show the claim 'For all k it is the case that P holds for every transition sequence of length k' by induction on k.
 
